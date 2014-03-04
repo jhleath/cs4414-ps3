@@ -62,6 +62,7 @@ struct WebServer {
     request_queue_arc: MutexArc<~[HTTP_Request]>,
     stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>,
     visitor_count_arc: RWArc<uint>,
+    cache_arc: RWArc<HashMap<Path, ~[u8]>>,
     
     notify_port: Port<()>,
     shared_notify_chan: SharedChan<()>,
@@ -81,6 +82,7 @@ impl WebServer {
             request_queue_arc: MutexArc::new(~[]),
             stream_map_arc: MutexArc::new(HashMap::new()),
             visitor_count_arc: RWArc::new(0),
+            cache_arc: RWArc::new(HashMap::new()),
             
             notify_port: notify_port,
             shared_notify_chan: shared_notify_chan,        
@@ -198,11 +200,32 @@ impl WebServer {
     
     // TODO: Streaming file.
     // TODO: Application-layer file caching.
-    fn respond_with_static_file(stream: Option<std::io::net::tcp::TcpStream>, path: &Path) {
+    fn respond_with_static_file(stream: Option<std::io::net::tcp::TcpStream>, path: &Path, cache_arc: RWArc<HashMap<Path, ~[u8]>>) {
         let mut stream = stream;
-        let mut file_reader = File::open(path).expect("Invalid file!");
-        stream.write(HTTP_OK.as_bytes());
-        stream.write(file_reader.read_to_end());
+        let mut file_content: ~[u8];
+        let mut in_cache = false;
+        cache_arc.read(|cache_map| {
+		if cache_map.contains_key(path) {
+			in_cache = true;
+			file_content = cache_map.get(path).to_owned();
+		}
+		else {
+			in_cache = false;
+		}
+        });
+        if in_cache {
+        	stream.write(HTTP_OK.as_bytes());
+	        stream.write(file_content);
+        }
+        else {
+		let mut file_reader = File::open(path).expect("Invalid file!");
+		file_content = file_reader.read_to_end();
+		cache_arc.write(|cache_map| {
+			cache_map.insert(*path, file_content.to_owned());
+		});
+		stream.write(HTTP_OK.as_bytes());
+		stream.write(file_content);
+        }
     }
     
     // DONE: Server-side gashing.
@@ -286,13 +309,15 @@ impl WebServer {
             	}
             	None => { from_cville = false; }
             }
-            match pn.find_str("137.54") {
-            	Some(ind) => {
-            		if ind == 0 {
-            			from_cville = true;
-            		}
-            	}
-            	None => { from_cville = false; }
+            if !from_cville {
+		    match pn.find_str("137.54") {
+		    	Some(ind) => {
+		    		if ind == 0 {
+		    			from_cville = true;
+		    		}
+		    	}
+		    	None => { from_cville = false; }
+		    }
             }
             if from_cville {
             	local_req_queue.unshift(req);
