@@ -18,12 +18,14 @@ extern mod extra;
 
 use std::io::*;
 use std::io::net::ip::{SocketAddr};
-use std::{os, str, libc, from_str};
+use std::{os, str, libc, from_str, path, run};
 use std::path::Path;
 use std::hashmap::HashMap;
+use std::io::buffered::BufferedReader;
+use std::io::pipe::PipeStream;
 
 use extra::getopts;
-use extra::arc::MutexArc;
+use extra::arc::{MutexArc,RWArc};
 
 static SERVER_NAME : &'static str = "Zhtta Version 0.5";
 
@@ -41,7 +43,7 @@ static COUNTER_STYLE : &'static str = "<doctype !html><html><head><title>Hello, 
              </style></head>
              <body>";
 
-static mut visitor_count : uint = 0;
+//static mut visitor_count : uint = 0;
 
 struct HTTP_Request {
     // Use peer_name as the key to access TcpStream in hashmap. 
@@ -59,6 +61,7 @@ struct WebServer {
     
     request_queue_arc: MutexArc<~[HTTP_Request]>,
     stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>,
+    visitor_count_arc: RWArc<uint>,
     
     notify_port: Port<()>,
     shared_notify_chan: SharedChan<()>,
@@ -77,6 +80,7 @@ impl WebServer {
                         
             request_queue_arc: MutexArc::new(~[]),
             stream_map_arc: MutexArc::new(HashMap::new()),
+            visitor_count_arc: RWArc::new(0),
             
             notify_port: notify_port,
             shared_notify_chan: shared_notify_chan,        
@@ -95,6 +99,7 @@ impl WebServer {
         let request_queue_arc = self.request_queue_arc.clone();
         let shared_notify_chan = self.shared_notify_chan.clone();
         let stream_map_arc = self.stream_map_arc.clone();
+        let visitor_count_arc = self.visitor_count_arc.clone();
                 
         spawn(proc() {
             let mut acceptor = net::tcp::TcpListener::bind(addr).listen();
@@ -105,12 +110,20 @@ impl WebServer {
                 let (queue_port, queue_chan) = Chan::new();
                 queue_chan.send(request_queue_arc.clone());
                 
+                let (count_port, count_chan) = Chan::new();
+                count_chan.send(visitor_count_arc.clone());
+                
                 let notify_chan = shared_notify_chan.clone();
                 let stream_map_arc = stream_map_arc.clone();
                 
                 // Spawn a task to handle the connection.
                 spawn(proc() {
-                    unsafe { visitor_count += 1; } // TODO: Fix unsafe counter
+                    // DONE: Fix unsafe counter
+                    let visitor_count_arc = count_port.recv();
+                    visitor_count_arc.write(|visitor_count| {
+                    	*visitor_count += 1;
+                    });
+                    
                     let request_queue_arc = queue_port.recv();
                   
                     let mut stream = stream;
@@ -139,7 +152,7 @@ impl WebServer {
                              
                         if path_str == ~"./" {
                             debug!("===== Counter Page request =====");
-                            WebServer::respond_with_counter_page(stream);
+                            WebServer::respond_with_counter_page(stream, visitor_count_arc);
                             debug!("=====Terminated connection from [{:s}].=====", peer_name);
                         } else if !path_obj.exists() || path_obj.is_dir() {
                             debug!("===== Error page request =====");
@@ -167,14 +180,18 @@ impl WebServer {
         stream.write(msg.as_bytes());
     }
 
-    // TODO: Safe visitor counter.
-    fn respond_with_counter_page(stream: Option<std::io::net::tcp::TcpStream>) {
+    // DONE: Safe visitor counter.
+    fn respond_with_counter_page(stream: Option<std::io::net::tcp::TcpStream>, visitor_count_arc: RWArc<uint>) {
         let mut stream = stream;
+        let mut response_visitor_count = 0;
+        visitor_count_arc.read(|visitor_count| {
+        	response_visitor_count = *visitor_count;
+        });
         let response: ~str = 
             format!("{:s}{:s}<h1>Greetings, Krusty!</h1>
                      <h2>Visitor count: {:u}</h2></body></html>\r\n", 
                     HTTP_OK, COUNTER_STYLE, 
-                    unsafe { visitor_count } );
+                    response_visitor_count );
         debug!("Responding to counter request");
         stream.write(response.as_bytes());
     }
@@ -188,10 +205,51 @@ impl WebServer {
         stream.write(file_reader.read_to_end());
     }
     
-    // TODO: Server-side gashing.
+    // DONE: Server-side gashing.
     fn respond_with_dynamic_page(stream: Option<std::io::net::tcp::TcpStream>, path: &Path) {
         // for now, just serve as static file
-        WebServer::respond_with_static_file(stream, path);
+        // WebServer::respond_with_static_file(stream, path);
+        let mut stream = stream;
+        let mut file_reader = File::open(path);
+        stream.write(HTTP_OK.as_bytes());
+        match file_reader {
+        	Some(file) => {
+        		let mut reader = BufferedReader::new(file);
+        		let mut file_str = reader.read_to_str();
+        		let comment_st = "<!--";
+        		let comment_en = "-->";
+        		let command_str = "#exec cmd=";
+        		loop {
+				match file_str.find_str(comment_st) {
+					Some(ind) => {
+						stream.write_str(file_str.slice_to(ind));
+						let ind_end = file_str.find_str(comment_en).unwrap();
+						let tmp_str = file_str.slice(ind, ind_end+comment_en.len()).to_owned();
+						match tmp_str.find_str(command_str) {
+							Some(command_ind_st) => {
+								let command_tail = tmp_str.slice_from(command_ind_st+command_str.len()+1);
+								let command_ind_en = command_tail.find_str("\"").unwrap();
+								let command = command_tail.slice_to(command_ind_en);
+						
+								// execute command with gash
+								// stream.write_str(command);
+								stream.write_str(run_cmdline(command));
+							}
+							None => ()
+						}
+						
+						stream.write_str(file_str.slice(ind, ind_end+comment_en.len()));
+						
+						file_str = file_str.slice_from(ind_end+comment_en.len()).to_owned();
+					}
+					None => { stream.write_str(file_str); break; }
+				}
+        		}
+        	}
+        	None => {
+        		debug!("Error opening file!");
+        	}
+        }
     }
     
     // TODO: Smarter Scheduling.
@@ -218,7 +276,30 @@ impl WebServer {
         req_queue_arc.access(|local_req_queue| {
             debug!("Got queue mutex lock.");
             let req: HTTP_Request = req_port.recv();
-            local_req_queue.push(req);
+            let pn = req.peer_name.clone();
+            let mut from_cville = true;
+            match pn.find_str("128.143") {
+            	Some(ind) => {
+            		if ind == 0 {
+            			from_cville = true;
+            		}
+            	}
+            	None => { from_cville = false; }
+            }
+            match pn.find_str("137.54") {
+            	Some(ind) => {
+            		if ind == 0 {
+            			from_cville = true;
+            		}
+            	}
+            	None => { from_cville = false; }
+            }
+            if from_cville {
+            	local_req_queue.unshift(req);
+            }
+            else {
+            	local_req_queue.push(req);
+            }
             debug!("A new request enqueued, now the length of queue is {:u}.", local_req_queue.len());
         });
         
@@ -335,4 +416,137 @@ fn main() {
     let (ip_str, port, www_dir_str) = get_args();
     let mut zhtta = WebServer::new(ip_str, port, www_dir_str);
     zhtta.run();
+}
+
+// GASH
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+pub fn run_cmdline(cmd_line: &str) -> ~str{
+    let cmd_line: ~str = cmd_line.trim().to_owned();
+    
+    // handle pipelines 
+    let progs: ~[~str] =
+        cmd_line.split('|').filter_map(|x| if x != "" { Some(x.to_owned()) } else { None }).to_owned_vec();
+    
+    let mut pipes: ~[os::Pipe] = ~[];
+    
+    // create pipes
+    pipes.push(os::Pipe { input: 0, out: 0 }); // first pipe is standard input
+    for _ in range(0, progs.len() - 1) {
+        pipes.push(os::pipe());
+    }
+    pipes.push(os::pipe()); // last is not necessarily the standard output, for ps3
+    
+    for i in range(0, progs.len()) {
+        run_single_cmd(progs[i], pipes[i].input, pipes[i+1].out, 2, 
+                            if (i == progs.len() - 1) { false } else { true }); // all in bg except possibly last one
+    }
+    // read output from the last pipe.input.
+     
+    let mut pipe_stream = PipeStream::open(pipes[progs.len()].input);
+    let content = pipe_stream.read_to_str();
+    return content;
+}
+
+// run a single command line, probably with redirection sign >, definitly without pipelines | and background sign &.
+fn run_single_cmd(cmd_line: &str, pipe_in: libc::c_int, pipe_out: libc::c_int, pipe_err: libc::c_int, bg: bool) {
+    let mut argv = parse_argv(cmd_line);
+
+    if argv.len() <= 0 {
+        // empty command line
+        return;
+    }
+    
+    let mut out_fd = pipe_out;
+    let mut in_fd = pipe_in;
+    let err_fd = pipe_err;
+    
+    let mut i = 0;
+    
+    while (i < argv.len()) {
+        if (argv[i] == ~">") {
+            argv.remove(i);
+            out_fd = get_fd(argv.remove(i), "w");
+        } else if (argv[i] == ~"<") {
+            argv.remove(i);
+            in_fd = get_fd(argv.remove(i), "r");
+        }
+        i += 1;
+    }
+    
+    let out_fd = out_fd;
+    let in_fd = in_fd;
+    
+    if argv.len() <= 0 {
+        // invalid command line
+        return;
+    }
+    
+    let program = argv.remove(0);
+    match program {
+        ~"cd"       => { if argv.len()>0 { os::change_dir(&path::Path::new(argv[0])); } }
+        _           => { if !cmd_exists(program) {
+                             println!("{:s}: command not found", program);
+                             return;
+                         } else {
+                             // To see debug! outputs set the RUST_LOG environment variable, e.g.: export RUST_LOG="gash=debug" 
+                             debug!("Program: {:s}, in_fd: {:d}, out_fd: {:d}, err_fd: {:d}", program, in_fd, out_fd, err_fd);
+                             let opt_prog = run::Process::new(program, argv, 
+                                                              run::ProcessOptions { env: None, dir: None,
+                                                                                    in_fd: Some(in_fd), out_fd: Some(out_fd), err_fd: Some(err_fd)
+                                                                                  });
+                                
+                             let mut prog = opt_prog.expect("Error: creating process error.");
+                             if in_fd != 0 {os::close(in_fd);}
+                             if out_fd != 1 {os::close(out_fd);}
+                             if err_fd != 2 {os::close(err_fd);}
+
+                             if !bg {
+                                 prog.finish();
+                                 std::io::stdio::flush();
+                                 debug!("Terminated fg program: {:}", program);
+                             } else {
+                                 let (p_port, p_chan) = Chan::new();
+                                 p_chan.send(prog);
+                                 spawn(proc() {
+                                    let mut prog: run::Process = p_port.recv();
+                                       
+                                    prog.finish(); 
+                                    std::io::stdio::flush();
+                                    debug!("Terminated bg program: {:}", program);
+                                 });
+                            }
+                        }
+                  }
+    } // match program
+} // run_single_cmd
+    
+// input: a single command line
+// output: a vector of arguments. The program name is put in the first position.
+// notes: arguments can be separated by space(s), ""  
+fn parse_argv(cmd_line: &str) -> ~[~str] {
+    let mut argv: ~[~str] = ~[];
+    let group: ~[~str] = cmd_line.split('\"').filter_map(|x| if x != "" { Some(x.to_owned()) } else { None }).to_owned_vec();
+
+    for i in range(0, group.len()) {            
+        if i % 2 == 0 { // split by " "
+            argv.push_all_move(group[i].split(' ').filter_map(|x| if x != "" { Some(x.to_owned()) } else { None }).to_owned_vec());
+        } else {
+            argv.push(group[i].clone());
+        }
+    }
+    
+    argv
+}
+
+fn cmd_exists(cmd_path: &str) -> bool {
+    run::process_output("which", [cmd_path.to_owned()]).expect("exit code error.").status.success()
+}
+
+fn get_fd(fpath: &str, mode: &str) -> libc::c_int {
+    unsafe {
+        let fpathbuf = fpath.to_c_str().unwrap();
+        let modebuf = mode.to_c_str().unwrap();
+        return libc::fileno(libc::fopen(fpathbuf, modebuf));
+    }
 }
