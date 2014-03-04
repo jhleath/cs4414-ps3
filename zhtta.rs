@@ -72,6 +72,7 @@ struct WebServer {
     request_queue_arc: MutexArc<PriorityQueue<~HTTP_Request>>,
     stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>,
     visitor_count_arc: RWArc<uint>,
+    cache_arc: RWArc<HashMap<Path, ~[u8]>>,
     
     notify_port: Port<()>,
     shared_notify_chan: SharedChan<()>,
@@ -91,6 +92,7 @@ impl WebServer {
             request_queue_arc: MutexArc::new(PriorityQueue::new()),
             stream_map_arc: MutexArc::new(HashMap::new()),
             visitor_count_arc: RWArc::new(0),
+            cache_arc: RWArc::new(HashMap::new()),
             
             notify_port: notify_port,
             shared_notify_chan: shared_notify_chan,        
@@ -209,18 +211,52 @@ impl WebServer {
     
     // TODO: Streaming file.
     // TODO: Application-layer file caching.
-    fn respond_with_static_file(stream: Option<std::io::net::tcp::TcpStream>, path: &Path) {
+    fn respond_with_static_file(stream: Option<std::io::net::tcp::TcpStream>, path: &Path, cache_arc: RWArc<HashMap<Path, ~[u8]>>) {
         let mut stream = stream;
-        let mut file_reader = File::open(path).expect("Invalid file!");
-        stream.write(HTTP_OK.as_bytes());
-        loop {
-            let mut bytes = [0, .. 1024];
-            file_reader.read(bytes);
-            stream.write(bytes);
 
-            if file_reader.eof() { break; }
+        let mut file_content: ~[u8] = ~[];
+        let mut in_cache = false;
+
+        cache_arc.read(|cache_map| {
+
+            if cache_map.contains_key(path) {
+                in_cache = true;
+                file_content = cache_map.get(path).to_owned();
+                // file_content = ~[072, 101, 108, 108, 111, 044, 032, 087, 111, 114, 108, 100];
+            }
+            else {
+                in_cache = false;
+            }
+        });
+        if in_cache {
+            stream.write(HTTP_OK.as_bytes());
+            stream.write(file_content);
         }
-        // stream.write(file_reader.read_to_end());
+        else {
+            cache_arc.write(|cache_map| {
+                let new_path = path.clone();
+                let mut file_reader = File::open(path).expect("Invalid file!");
+
+                stream.write(HTTP_OK.as_bytes());
+
+                let mut total_file : ~[u8] = ~[];
+
+                debug!("Writing Bytes");
+                loop {
+                    let mut bytes = ~[0, .. 1024];
+                    file_reader.read(bytes);
+
+                    stream.write(bytes);
+
+                    total_file.push_all_move(bytes);
+
+                    if file_reader.eof() { break; }
+                }
+
+                cache_map.insert(new_path, total_file.to_owned());
+            });
+        }
+        debug!("Done");
     }
     
     // DONE: Server-side gashing.
@@ -330,12 +366,14 @@ impl WebServer {
     fn dequeue_static_file_request(&mut self) {
         let outer_req_queue_get = self.request_queue_arc.clone();
         let outer_stream_map_get = self.stream_map_arc.clone();
+        let outer_cache_get = self.cache_arc.clone();
 
         let mut notify_channels : ~[Chan<()>] = ~[];
 
         for _ in range(0, NUM_PROCESS) {
             let req_queue_get = outer_req_queue_get.clone();
             let stream_map_get = outer_stream_map_get.clone();
+            let cache_get = outer_cache_get.clone();
 
             let (notify_port, notify_chan) = Chan::new();
             notify_channels.push(notify_chan);
@@ -373,7 +411,7 @@ impl WebServer {
                     
                     // TODO: Spawning more tasks to respond the dequeued requests concurrently. You may need a semophore to control the concurrency.
                     let stream = stream_port.recv();
-                    WebServer::respond_with_static_file(stream, request.path);
+                    WebServer::respond_with_static_file(stream, request.path, cache_get.clone());
                     // Close stream automatically.
                     debug!("=====Terminated connection from [{:s}].=====", request.peer_name);
                 }
