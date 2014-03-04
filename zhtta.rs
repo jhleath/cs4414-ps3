@@ -121,7 +121,7 @@ impl WebServer {
                     // DONE: Fix unsafe counter
                     let visitor_count_arc = count_port.recv();
                     visitor_count_arc.write(|visitor_count| {
-                    	*visitor_count += 1;
+                        *visitor_count += 1;
                     });
                     
                     let request_queue_arc = queue_port.recv();
@@ -185,7 +185,7 @@ impl WebServer {
         let mut stream = stream;
         let mut response_visitor_count = 0;
         visitor_count_arc.read(|visitor_count| {
-        	response_visitor_count = *visitor_count;
+            response_visitor_count = *visitor_count;
         });
         let response: ~str = 
             format!("{:s}{:s}<h1>Greetings, Krusty!</h1>
@@ -213,42 +213,42 @@ impl WebServer {
         let mut file_reader = File::open(path);
         stream.write(HTTP_OK.as_bytes());
         match file_reader {
-        	Some(file) => {
-        		let mut reader = BufferedReader::new(file);
-        		let mut file_str = reader.read_to_str();
-        		let comment_st = "<!--";
-        		let comment_en = "-->";
-        		let command_str = "#exec cmd=";
-        		loop {
-				match file_str.find_str(comment_st) {
-					Some(ind) => {
-						stream.write_str(file_str.slice_to(ind));
-						let ind_end = file_str.find_str(comment_en).unwrap();
-						let tmp_str = file_str.slice(ind, ind_end+comment_en.len()).to_owned();
-						match tmp_str.find_str(command_str) {
-							Some(command_ind_st) => {
-								let command_tail = tmp_str.slice_from(command_ind_st+command_str.len()+1);
-								let command_ind_en = command_tail.find_str("\"").unwrap();
-								let command = command_tail.slice_to(command_ind_en);
-						
-								// execute command with gash
-								// stream.write_str(command);
-								stream.write_str(run_cmdline(command));
-							}
-							None => ()
-						}
-						
-						stream.write_str(file_str.slice(ind, ind_end+comment_en.len()));
-						
-						file_str = file_str.slice_from(ind_end+comment_en.len()).to_owned();
-					}
-					None => { stream.write_str(file_str); break; }
-				}
-        		}
-        	}
-        	None => {
-        		debug!("Error opening file!");
-        	}
+            Some(file) => {
+                let mut reader = BufferedReader::new(file);
+                let mut file_str = reader.read_to_str();
+                let comment_st = "<!--";
+                let comment_en = "-->";
+                let command_str = "#exec cmd=";
+                loop {
+                match file_str.find_str(comment_st) {
+                    Some(ind) => {
+                        stream.write_str(file_str.slice_to(ind));
+                        let ind_end = file_str.find_str(comment_en).unwrap();
+                        let tmp_str = file_str.slice(ind, ind_end+comment_en.len()).to_owned();
+                        match tmp_str.find_str(command_str) {
+                            Some(command_ind_st) => {
+                                let command_tail = tmp_str.slice_from(command_ind_st+command_str.len()+1);
+                                let command_ind_en = command_tail.find_str("\"").unwrap();
+                                let command = command_tail.slice_to(command_ind_en);
+                        
+                                // execute command with gash
+                                // stream.write_str(command);
+                                stream.write_str(run_cmdline(command));
+                            }
+                            None => ()
+                        }
+                        
+                        stream.write_str(file_str.slice(ind, ind_end+comment_en.len()));
+                        
+                        file_str = file_str.slice_from(ind_end+comment_en.len()).to_owned();
+                    }
+                    None => { stream.write_str(file_str); break; }
+                }
+                }
+            }
+            None => {
+                debug!("Error opening file!");
+            }
         }
     }
     
@@ -279,26 +279,28 @@ impl WebServer {
             let pn = req.peer_name.clone();
             let mut from_cville = true;
             match pn.find_str("128.143") {
-            	Some(ind) => {
-            		if ind == 0 {
-            			from_cville = true;
-            		}
-            	}
-            	None => { from_cville = false; }
+                Some(ind) => {
+                    if ind == 0 {
+                        from_cville = true;
+                    }
+                }
+                None => { from_cville = false; }
             }
-            match pn.find_str("137.54") {
-            	Some(ind) => {
-            		if ind == 0 {
-            			from_cville = true;
-            		}
-            	}
-            	None => { from_cville = false; }
+            if !from_cville {
+                match pn.find_str("137.54") {
+                    Some(ind) => {
+                        if ind == 0 {
+                            from_cville = true;
+                        }
+                    }
+                    None => { from_cville = false; }
+                }
             }
             if from_cville {
-            	local_req_queue.unshift(req);
+                local_req_queue.unshift(req);
             }
             else {
-            	local_req_queue.push(req);
+                local_req_queue.push(req);
             }
             debug!("A new request enqueued, now the length of queue is {:u}.", local_req_queue.len());
         });
