@@ -26,6 +26,7 @@ use std::io::pipe::PipeStream;
 
 use extra::getopts;
 use extra::arc::{MutexArc,RWArc};
+use extra::priority_queue::PriorityQueue;
 
 static SERVER_NAME : &'static str = "Zhtta Version 0.5";
 
@@ -54,6 +55,13 @@ struct HTTP_Request {
     //  See issue: https://github.com/mozilla/rust/issues/12139)
     peer_name: ~str,
     path: ~Path,
+    priority: uint,
+}
+
+impl Ord for HTTP_Request {
+    fn lt(&self, other : &HTTP_Request) -> bool {
+        return self.priority < other.priority
+    }
 }
 
 struct WebServer {
@@ -61,7 +69,7 @@ struct WebServer {
     port: uint,
     www_dir_path: ~Path,
     
-    request_queue_arc: MutexArc<~[HTTP_Request]>,
+    request_queue_arc: MutexArc<PriorityQueue<~HTTP_Request>>,
     stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>,
     visitor_count_arc: RWArc<uint>,
     
@@ -80,7 +88,7 @@ impl WebServer {
             port: port,
             www_dir_path: www_dir_path,
                         
-            request_queue_arc: MutexArc::new(~[]),
+            request_queue_arc: MutexArc::new(PriorityQueue::new()),
             stream_map_arc: MutexArc::new(HashMap::new()),
             visitor_count_arc: RWArc::new(0),
             
@@ -256,7 +264,7 @@ impl WebServer {
     }
     
     // TODO: Smarter Scheduling.
-    fn enqueue_static_file_request(stream: Option<std::io::net::tcp::TcpStream>, path_obj: &Path, stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>, req_queue_arc: MutexArc<~[HTTP_Request]>, notify_chan: SharedChan<()>) {
+    fn enqueue_static_file_request(stream: Option<std::io::net::tcp::TcpStream>, path_obj: &Path, stream_map_arc: MutexArc<HashMap<~str, Option<std::io::net::tcp::TcpStream>>>, req_queue_arc: MutexArc<PriorityQueue<~HTTP_Request>>, notify_chan: SharedChan<()>) {
         // Save stream in hashmap for later response.
         let mut stream = stream;
         let peer_name = WebServer::get_peer_name(&mut stream);
@@ -271,7 +279,32 @@ impl WebServer {
         }
         
         // Enqueue the HTTP request.
-        let req = HTTP_Request { peer_name: peer_name.clone(), path: ~path_obj.clone() };
+        let mut req = HTTP_Request { peer_name: peer_name.clone(), path: ~path_obj.clone(), priority: 0 };
+
+        match req.path.stat().size.to_uint() {
+            Some(file_size) => req.priority -= file_size,
+            None => {}
+        }
+
+        // Check to See if From CVille
+        let pn = peer_name;
+        match pn.find_str("128.143") {
+            Some(ind) => { 
+                if ind == 0 {
+                    req.priority += 1000;
+                }
+            }
+            None => {}
+        }
+        match pn.find_str("137.54") {
+            Some(ind) => { 
+                if ind == 0 {
+                    req.priority += 1000;
+                }
+            }
+            None => {}
+        }
+
         let (req_port, req_chan) = Chan::new();
         req_chan.send(req);
 
@@ -279,32 +312,7 @@ impl WebServer {
         req_queue_arc.access(|local_req_queue| {
             debug!("Got queue mutex lock.");
             let req: HTTP_Request = req_port.recv();
-            let pn = req.peer_name.clone();
-            let mut from_cville = true;
-            match pn.find_str("128.143") {
-                Some(ind) => {
-                    if ind == 0 {
-                        from_cville = true;
-                    }
-                }
-                None => { from_cville = false; }
-            }
-            if !from_cville {
-                match pn.find_str("137.54") {
-                    Some(ind) => {
-                        if ind == 0 {
-                            from_cville = true;
-                        }
-                    }
-                    None => { from_cville = false; }
-                }
-            }
-            if from_cville {
-                local_req_queue.unshift(req);
-            }
-            else {
-                local_req_queue.push(req);
-            }
+            local_req_queue.push(~req);
             debug!("A new request enqueued, now the length of queue is {:u}.", local_req_queue.len());
         });
         
@@ -318,7 +326,7 @@ impl WebServer {
 
         let mut notify_channels : ~[Chan<()>] = ~[];
 
-        for range(0, NUM_PROCESS) {
+        for _ in range(0, NUM_PROCESS) {
             let req_queue_get = outer_req_queue_get.clone();
             let stream_map_get = outer_stream_map_get.clone();
 
@@ -334,7 +342,8 @@ impl WebServer {
                     notify_port.recv();
 
                     req_queue_get.access( |req_queue| {
-                        match req_queue.shift_opt() { // FIFO queue.
+                        let the_req = req_queue.maybe_pop();
+                        match the_req { // FIFO queue.
                             None => { /* do nothing */ }
                             Some(req) => {
                                 request_chan.send(req);
