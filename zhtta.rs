@@ -264,7 +264,7 @@ impl WebServer {
         // for now, just serve as static file
         // WebServer::respond_with_static_file(stream, path);
         let mut stream = stream;
-        let mut file_reader = File::open(path);
+        let file_reader = File::open(path);
         stream.write(HTTP_OK.as_bytes());
         match file_reader {
             Some(file) => {
