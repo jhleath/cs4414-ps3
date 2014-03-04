@@ -29,6 +29,8 @@ use extra::arc::{MutexArc,RWArc};
 
 static SERVER_NAME : &'static str = "Zhtta Version 0.5";
 
+static NUM_PROCESS : uint = 4;
+
 static IP : &'static str = "127.0.0.1";
 static PORT : uint = 4414;
 static WWW_DIR : &'static str = "./www";
@@ -94,14 +96,15 @@ impl WebServer {
     
     fn listen(&mut self) {
         let addr = from_str::<SocketAddr>(format!("{:s}:{:u}", self.ip, self.port)).expect("Address error.");
+
         let www_dir_path_str = self.www_dir_path.as_str().expect("invalid www path?").to_owned();
-        
+
         let request_queue_arc = self.request_queue_arc.clone();
         let shared_notify_chan = self.shared_notify_chan.clone();
         let stream_map_arc = self.stream_map_arc.clone();
         let visitor_count_arc = self.visitor_count_arc.clone();
-                
-        spawn(proc() {
+
+        spawn(proc() {;
             let mut acceptor = net::tcp::TcpListener::bind(addr).listen();
             println!("{:s} listening on {:s} (serving from: {:s}).", 
                      SERVER_NAME, addr.to_str(), www_dir_path_str);
@@ -306,48 +309,69 @@ impl WebServer {
         });
         
         notify_chan.send(()); // Send incoming notification to responder task.
-    
-    
     }
     
     // TODO: Smarter Scheduling.
     fn dequeue_static_file_request(&mut self) {
-        let req_queue_get = self.request_queue_arc.clone();
-        let stream_map_get = self.stream_map_arc.clone();
-        
-        // Port<> cannot be sent to another task. So we have to make this task as the main task that can access self.notify_port.
-        
-        let (request_port, request_chan) = Chan::new();
-        loop {
-            self.notify_port.recv();    // waiting for new request enqueued.
-            
-            req_queue_get.access( |req_queue| {
-                match req_queue.shift_opt() { // FIFO queue.
-                    None => { /* do nothing */ }
-                    Some(req) => {
-                        request_chan.send(req);
-                        debug!("A new request dequeued, now the length of queue is {:u}.", req_queue.len());
+        let outer_req_queue_get = self.request_queue_arc.clone();
+        let outer_stream_map_get = self.stream_map_arc.clone();
+
+        let mut notify_channels : ~[Chan<()>] = ~[];
+
+        for range(0, NUM_PROCESS) {
+            let req_queue_get = outer_req_queue_get.clone();
+            let stream_map_get = outer_stream_map_get.clone();
+
+            let (notify_port, notify_chan) = Chan::new();
+            notify_channels.push(notify_chan);
+
+            spawn(proc() {
+                // Port<> cannot be sent to another task. So we have to make this task as the main task that can access self.notify_port.
+                
+                let (request_port, request_chan) = Chan::new();
+                loop {
+                   // waiting for new request enqueued.
+                    notify_port.recv();
+
+                    req_queue_get.access( |req_queue| {
+                        match req_queue.shift_opt() { // FIFO queue.
+                            None => { /* do nothing */ }
+                            Some(req) => {
+                                request_chan.send(req);
+                                debug!("A new request dequeued, now the length of queue is {:u}.", req_queue.len());
+                            }
+                        }
+                    });
+                    
+                    let request = request_port.recv();
+                    
+                    // Get stream from hashmap.
+                    // Use unsafe method, because TcpStream in Rust 0.9 doesn't have "Freeze" bound.
+                    let (stream_port, stream_chan) = Chan::new();
+                    unsafe {
+                        stream_map_get.unsafe_access(|local_stream_map| {
+                            let stream = local_stream_map.pop(&request.peer_name).expect("no option tcpstream");
+                            stream_chan.send(stream);
+                        });
                     }
+                    
+                    // TODO: Spawning more tasks to respond the dequeued requests concurrently. You may need a semophore to control the concurrency.
+                    let stream = stream_port.recv();
+                    WebServer::respond_with_static_file(stream, request.path);
+                    // Close stream automatically.
+                    debug!("=====Terminated connection from [{:s}].=====", request.peer_name);
                 }
             });
-            
-            let request = request_port.recv();
-            
-            // Get stream from hashmap.
-            // Use unsafe method, because TcpStream in Rust 0.9 doesn't have "Freeze" bound.
-            let (stream_port, stream_chan) = Chan::new();
-            unsafe {
-                stream_map_get.unsafe_access(|local_stream_map| {
-                    let stream = local_stream_map.pop(&request.peer_name).expect("no option tcpstream");
-                    stream_chan.send(stream);
-                });
-            }
-            
-            // TODO: Spawning more tasks to respond the dequeued requests concurrently. You may need a semophore to control the concurrency.
-            let stream = stream_port.recv();
-            WebServer::respond_with_static_file(stream, request.path);
-            // Close stream automatically.
-            debug!("=====Terminated connection from [{:s}].=====", request.peer_name);
+        }
+
+        // Like a Channel Mutex
+        loop {
+            // Send the requests to each channel
+            // Wait for Notification to arrive
+            self.notify_port.recv();
+            for a_notify_chan in notify_channels.iter() {
+                a_notify_chan.send(());
+            } 
         }
     }
     
