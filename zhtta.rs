@@ -30,7 +30,8 @@ use extra::priority_queue::PriorityQueue;
 
 static SERVER_NAME : &'static str = "Zhtta Version 0.5";
 
-static NUM_PROCESS : uint = 4;
+static NUM_RESPONDERS : uint = 50;
+static PRIVILEGED_IP_PREFIXES : &'static [&'static str] = &'static ["137.54", "128.143"];
 
 static IP : &'static str = "127.0.0.1";
 static PORT : uint = 4414;
@@ -47,20 +48,34 @@ static COUNTER_STYLE : &'static str = "<doctype !html><html><head><title>Hello, 
              <body>";
 
 //static mut visitor_count : uint = 0;
-
 struct HTTP_Request {
-    // Use peer_name as the key to access TcpStream in hashmap. 
+
+    // Use peer_name as the key to access TcpStream in hashmap.
 
     // (Due to a bug in extra::arc in Rust 0.9, it is very inconvenient to use TcpStream without the "Freeze" bound.
-    //  See issue: https://github.com/mozilla/rust/issues/12139)
-    peer_name: ~str,
+    // See issue: https://github.com/mozilla/rust/issues/12139)
+    peer_name: ~str, // peer_name: ipaddr:port of client
+
     path: ~Path,
-    priority: uint,
+    fsize: u64 // size of static file (in bytes) to be served
+
 }
 
 impl Ord for HTTP_Request {
-    fn lt(&self, other : &HTTP_Request) -> bool {
-        return self.priority < other.priority
+    fn lt(&self, other: &HTTP_Request) -> bool {
+        let mut self_ip_priv = false;
+        let mut other_ip_priv = false;
+
+        for ip in PRIVILEGED_IP_PREFIXES.iter() {
+            self_ip_priv = self_ip_priv || self.peer_name.starts_with(*ip);
+            other_ip_priv = other_ip_priv || other.peer_name.starts_with(*ip);
+        }
+        match (self_ip_priv, other_ip_priv) {
+            (true, true) => self.fsize > other.fsize,
+            (true, false) => false,
+            (false, true) => true,
+            (false, false) => self.fsize > other.fsize,
+        }
     }
 }
 
@@ -322,31 +337,7 @@ impl WebServer {
         }
         
         // Enqueue the HTTP request.
-        let mut req = HTTP_Request { peer_name: peer_name.clone(), path: ~path_obj.clone(), priority: 0 };
-
-        match req.path.stat().size.to_uint() {
-            Some(file_size) => req.priority -= file_size,
-            None => {}
-        }
-
-        // Check to See if From CVille
-        let pn = peer_name;
-        match pn.find_str("128.143") {
-            Some(ind) => { 
-                if ind == 0 {
-                    req.priority += 1000;
-                }
-            }
-            None => {}
-        }
-        match pn.find_str("137.54") {
-            Some(ind) => { 
-                if ind == 0 {
-                    req.priority += 1000;
-                }
-            }
-            None => {}
-        }
+        let mut req = HTTP_Request { peer_name: peer_name.clone(), path: ~path_obj.clone(), fsize: path_obj.stat().size };
 
         let (req_port, req_chan) = Chan::new();
         req_chan.send(req);
@@ -370,7 +361,7 @@ impl WebServer {
 
         let mut notify_channels : ~[Chan<()>] = ~[];
 
-        for _ in range(0, NUM_PROCESS) {
+        for _ in range(0, NUM_RESPONDERS) {
             let req_queue_get = outer_req_queue_get.clone();
             let stream_map_get = outer_stream_map_get.clone();
             let cache_get = outer_cache_get.clone();
