@@ -30,7 +30,7 @@ use extra::priority_queue::PriorityQueue;
 
 static SERVER_NAME : &'static str = "Zhtta Version 0.5";
 
-static NUM_RESPONDERS : uint = 50;
+static NUM_RESPONDERS : uint = 100;
 static PRIVILEGED_IP_PREFIXES : &'static [&'static str] = &'static ["137.54", "128.143"];
 
 static IP : &'static str = "127.0.0.1";
