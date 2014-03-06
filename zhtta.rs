@@ -248,26 +248,26 @@ impl WebServer {
             stream.write(file_content);
         }
         else {
+            let mut file_reader = File::open(path).expect("Invalid file!");
+
+            stream.write(HTTP_OK.as_bytes());
+
+            let mut total_file : ~[u8] = ~[];
+
+            debug!("Writing Bytes");
+            loop {
+                let mut bytes = ~[0, .. 16384];
+                file_reader.read(bytes);
+
+                stream.write(bytes);
+
+                total_file.push_all_move(bytes);
+
+                if file_reader.eof() { break; }
+            }
+
             cache_arc.write(|cache_map| {
                 let new_path = path.clone();
-                let mut file_reader = File::open(path).expect("Invalid file!");
-
-                stream.write(HTTP_OK.as_bytes());
-
-                let mut total_file : ~[u8] = ~[];
-
-                debug!("Writing Bytes");
-                loop {
-                    let mut bytes = ~[0, .. 1024];
-                    file_reader.read(bytes);
-
-                    stream.write(bytes);
-
-                    total_file.push_all_move(bytes);
-
-                    if file_reader.eof() { break; }
-                }
-
                 cache_map.insert(new_path, total_file.to_owned());
             });
         }

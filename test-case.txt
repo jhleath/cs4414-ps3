@@ -1,0 +1,1092 @@
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 1.
+A new request dequeued, now the length of queue is 0.
+Writing Bytes
+Done
+=====Terminated connection from [128.143.136.170:56369].=====
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56370].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 1.
+A new request dequeued, now the length of queue is 0.
+Done
+=====Terminated connection from [128.143.136.170:56371].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 1.
+A new request dequeued, now the length of queue is 0.
+Done
+=====Terminated connection from [128.143.136.170:56372].=====
+Request:
+GET /40M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/40M.bin]
+Requested path: [./40M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 1.
+A new request dequeued, now the length of queue is 0.
+Writing Bytes
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 1.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 2.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 3.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 4.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56378].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 5.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 6.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 7.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56382].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 8.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56384].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 9.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 10.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 11.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56388].=====
+Request:
+GET /10M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/10M.bin]
+Requested path: [./10M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 12.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 13.
+Request:
+GET /20M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/20M.bin]
+Requested path: [./20M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 14.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 15.
+Request:
+GET /5M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5M.bin]
+Requested path: [./5M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 16.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 17.
+Request:
+GET /20M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/20M.bin]
+Requested path: [./20M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 18.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 19.
+Request:
+GET /5M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5M.bin]
+Requested path: [./5M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 20.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 21.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 22.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56400].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 23.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 24.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 25.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56404].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 26.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 27.
+Request:
+GET /80M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/80M.bin]
+Requested path: [./80M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 28.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 29.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 30.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 31.
+Request:
+GET /10M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/10M.bin]
+Requested path: [./10M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 32.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 33.
+Request:
+GET /5M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5M.bin]
+Requested path: [./5M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 34.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 35.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 36.
+Request:
+GET /5M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5M.bin]
+Requested path: [./5M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 37.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 38.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 39.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56419].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 40.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 41.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 42.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 43.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 44.
+Request:
+GET /index.htm HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/index.htm]
+Requested path: [./index.htm]
+Trap: pushing handler to TLS
+Condition.raise: found handler
+Guard: popping handler from TLS
+===== Error page request =====
+=====Terminated connection from [128.143.136.170:56425].=====
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 45.
+Request:
+GET /5K.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/5K.bin]
+Requested path: [./5K.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 46.
+Request:
+GET /80M.bin HTTP/1.1
+User-Agent: httperf/0.9.0
+Host: ec2.hunterleath.com
+
+
+Requested path: [/home/ec2-user/4414/www/80M.bin]
+Requested path: [./80M.bin]
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+Trap: pushing handler to TLS
+Guard: popping handler from TLS
+===== Static Page request =====
+Waiting for queue mutex lock.
+Got queue mutex lock.
+A new request enqueued, now the length of queue is 47.
+Done
+=====Terminated connection from [128.143.136.170:56373].=====
+A new request dequeued, now the length of queue is 46.
+Done
+=====Terminated connection from [128.143.136.170:56374].=====
+A new request dequeued, now the length of queue is 45.
+Done
+=====Terminated connection from [128.143.136.170:56376].=====
+A new request dequeued, now the length of queue is 44.
+Done
+=====Terminated connection from [128.143.136.170:56381].=====
+A new request dequeued, now the length of queue is 43.
+Done
+=====Terminated connection from [128.143.136.170:56392].=====
+A new request dequeued, now the length of queue is 42.
+Done
+=====Terminated connection from [128.143.136.170:56410].=====
+A new request dequeued, now the length of queue is 41.
+Done
+=====Terminated connection from [128.143.136.170:56409].=====
+A new request dequeued, now the length of queue is 40.
+Done
+=====Terminated connection from [128.143.136.170:56427].=====
+A new request dequeued, now the length of queue is 39.
+Done
+=====Terminated connection from [128.143.136.170:56426].=====
+A new request dequeued, now the length of queue is 38.
+Done
+=====Terminated connection from [128.143.136.170:56424].=====
+A new request dequeued, now the length of queue is 37.
+Done
+=====Terminated connection from [128.143.136.170:56423].=====
+A new request dequeued, now the length of queue is 36.
+Done
+=====Terminated connection from [128.143.136.170:56422].=====
+A new request dequeued, now the length of queue is 35.
+Done
+=====Terminated connection from [128.143.136.170:56421].=====
+A new request dequeued, now the length of queue is 34.
+Done
+=====Terminated connection from [128.143.136.170:56418].=====
+A new request dequeued, now the length of queue is 33.
+Done
+=====Terminated connection from [128.143.136.170:56417].=====
+A new request dequeued, now the length of queue is 32.
+Done
+=====Terminated connection from [128.143.136.170:56408].=====
+A new request dequeued, now the length of queue is 31.
+Done
+=====Terminated connection from [128.143.136.170:56414].=====
+A new request dequeued, now the length of queue is 30.
+Done
+=====Terminated connection from [128.143.136.170:56380].=====
+A new request dequeued, now the length of queue is 29.
+Done
+=====Terminated connection from [128.143.136.170:56390].=====
+A new request dequeued, now the length of queue is 28.
+Done
+=====Terminated connection from [128.143.136.170:56406].=====
+A new request dequeued, now the length of queue is 27.
+Done
+=====Terminated connection from [128.143.136.170:56405].=====
+A new request dequeued, now the length of queue is 26.
+Done
+=====Terminated connection from [128.143.136.170:56402].=====
+A new request dequeued, now the length of queue is 25.
+Done
+=====Terminated connection from [128.143.136.170:56403].=====
+A new request dequeued, now the length of queue is 24.
+Done
+=====Terminated connection from [128.143.136.170:56375].=====
+A new request dequeued, now the length of queue is 23.
+Done
+=====Terminated connection from [128.143.136.170:56379].=====
+A new request dequeued, now the length of queue is 22.
+Done
+=====Terminated connection from [128.143.136.170:56387].=====
+A new request dequeued, now the length of queue is 21.
+Done
+=====Terminated connection from [128.143.136.170:56401].=====
+A new request dequeued, now the length of queue is 20.
+Done
+=====Terminated connection from [128.143.136.170:56399].=====
+A new request dequeued, now the length of queue is 19.
+Done
+=====Terminated connection from [128.143.136.170:56386].=====
+A new request dequeued, now the length of queue is 18.
+Done
+=====Terminated connection from [128.143.136.170:56398].=====
+A new request dequeued, now the length of queue is 17.
+Done
+=====Terminated connection from [128.143.136.170:56420].=====
+A new request dequeued, now the length of queue is 16.
+Done
+=====Terminated connection from [128.143.136.170:56377].=====
+A new request dequeued, now the length of queue is 15.
+Done
+=====Terminated connection from [128.143.136.170:56385].=====
+A new request dequeued, now the length of queue is 14.
+Done
+=====Terminated connection from [128.143.136.170:56415].=====
+A new request dequeued, now the length of queue is 13.
+Done
+=====Terminated connection from [128.143.136.170:56396].=====
+A new request dequeued, now the length of queue is 12.
+Done
+=====Terminated connection from [128.143.136.170:56394].=====
+A new request dequeued, now the length of queue is 11.
+Done
+=====Terminated connection from [128.143.136.170:56412].=====
+A new request dequeued, now the length of queue is 10.
+Done
+=====Terminated connection from [128.143.136.170:56383].=====
+A new request dequeued, now the length of queue is 9.
+Writing Bytes
+Done
+=====Terminated connection from [128.143.136.170:56411].=====
+A new request dequeued, now the length of queue is 8.
+Done
+=====Terminated connection from [128.143.136.170:56389].=====
+A new request dequeued, now the length of queue is 7.
+Writing Bytes
+Done
+=====Terminated connection from [128.143.136.170:56391].=====
+A new request dequeued, now the length of queue is 6.
+Done
+=====Terminated connection from [128.143.136.170:56395].=====
+A new request dequeued, now the length of queue is 5.
+Writing Bytes
+Done
+=====Terminated connection from [128.143.136.170:56428].=====
+A new request dequeued, now the length of queue is 4.
+Done
+=====Terminated connection from [128.143.136.170:56407].=====
+A new request dequeued, now the length of queue is 3.
+Writing Bytes
+Done
+=====Terminated connection from [128.143.136.170:56416].=====
+A new request dequeued, now the length of queue is 2.
+Done
+=====Terminated connection from [128.143.136.170:56413].=====
+A new request dequeued, now the length of queue is 1.
+Done
+=====Terminated connection from [128.143.136.170:56393].=====
+A new request dequeued, now the length of queue is 0.
+Done
+=====Terminated connection from [128.143.136.170:56397].=====
